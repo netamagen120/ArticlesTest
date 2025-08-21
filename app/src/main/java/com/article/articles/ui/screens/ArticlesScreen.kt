@@ -94,7 +94,7 @@ fun ArticlesScreen(
                     items(uiState.articles) { article ->
                         ArticleCard(
                             article = article,
-                            onClick = { /* TODO: Navigate to article detail */ }
+                            onClick = { }
                         )
                     }
                 }
