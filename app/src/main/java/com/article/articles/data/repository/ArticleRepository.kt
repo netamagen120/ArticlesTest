@@ -18,7 +18,7 @@ class ArticleRepository @Inject constructor(
             )
             response.articles
         } catch (e: Exception) {
-            emptyList()
+            throw e
         }
     }
 }

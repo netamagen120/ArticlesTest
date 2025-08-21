@@ -35,7 +35,7 @@ class ArticlesViewModel @Inject constructor(
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    error = e.message ?: "Unknown error occurred"
+                    error = "Unknown error occurred"
                 )
             }
         }
