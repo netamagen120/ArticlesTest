@@ -23,4 +23,8 @@
     <!-- Button dimensions -->
     <dimen name="button_height">48dp</dimen>
     <dimen name="button_corner_radius">24dp</dimen>
+
+    <!-- Loader dimensions -->
+    <dimen name="loader_size">32dp</dimen>
+    <dimen name="loader_stroke">3dp</dimen>
 </resources>

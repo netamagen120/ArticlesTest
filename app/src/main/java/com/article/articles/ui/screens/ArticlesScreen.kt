@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -24,7 +25,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -44,6 +44,7 @@ fun ArticlesScreen(
     viewModel: ArticlesViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -70,50 +71,63 @@ fun ArticlesScreen(
             )
         }
     ) { paddingValues ->
-        when {
-            uiState.isLoading -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-            uiState.error != null -> {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = "Error: ${uiState.error}",
-                        color = MaterialTheme.colorScheme.error
-                    )
-                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_medium)))
-                    Button(onClick = { viewModel.refreshArticles() }) {
-                        Text("Retry")
-                    }
-                }
-            }
-            else -> {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentPadding = PaddingValues(dimensionResource(R.dimen.content_padding)),
-                    verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_medium))
-                ) {
-                    items(uiState.articles, key = { it.url }) { article ->
-                        ArticleCard(
-                            article = article,
-                            onClick = { onArticleClick(article.url, article.title) }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            when {
+                uiState.error != null && uiState.articles.isEmpty() -> {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "Error: ${uiState.error}",
+                            color = MaterialTheme.colorScheme.error
                         )
+                        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_medium)))
+                        Button(onClick = { viewModel.refreshArticles() }) {
+                            Text("Retry")
+                        }
                     }
                 }
+
+                uiState.articles.isEmpty() -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(dimensionResource(R.dimen.content_padding)),
+                        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_medium))
+                    ) {
+                        items(uiState.articles) { article ->
+                            ArticleCard(
+                                article = article,
+                                onClick = {
+                                    onArticleClick(article.url, article.title) 
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+
+            if (uiState.isLoading && uiState.articles.isNotEmpty()) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(dimensionResource(R.dimen.loader_size)),
+                    strokeWidth = dimensionResource(R.dimen.loader_stroke)
+                )
             }
         }
     }
