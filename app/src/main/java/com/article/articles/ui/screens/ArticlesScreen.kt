@@ -1,6 +1,5 @@
 package com.article.articles.ui.screens
 
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,13 +27,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.article.articles.R
 import com.article.articles.ui.components.ArticleCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArticlesScreen(
-    viewModel: ArticlesViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: ArticlesViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     
@@ -76,7 +77,7 @@ fun ArticlesScreen(
                         text = "Error: ${uiState.error}",
                         color = MaterialTheme.colorScheme.error
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_medium)))
                     Button(onClick = { viewModel.refreshArticles() }) {
                         Text("Retry")
                     }
@@ -87,13 +88,13 @@ fun ArticlesScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    contentPadding = PaddingValues(dimensionResource(R.dimen.content_padding)),
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_medium))
                 ) {
                     items(uiState.articles) { article ->
                         ArticleCard(
                             article = article,
-                            onClick = { /* TODO: Navigate to article detail!!! */ }
+                            onClick = { /* TODO: Navigate to article detail */ }
                         )
                     }
                 }

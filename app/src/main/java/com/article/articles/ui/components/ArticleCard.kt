@@ -17,8 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
 import coil.compose.AsyncImage
+import com.article.articles.R
 import com.article.articles.data.model.Article
 
 @Composable
@@ -31,7 +32,7 @@ fun ArticleCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = dimensionResource(R.dimen.card_elevation))
     ) {
         Column {
             article.imageUrl?.let { imageUrl ->
@@ -40,14 +41,15 @@ fun ArticleCard(
                     contentDescription = article.title,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp),
+                        .height(dimensionResource(R.dimen.article_image_height)),
                     contentScale = ContentScale.Crop
                 )
             }
-
+            
+            // Article Content
             Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                modifier = Modifier.padding(dimensionResource(R.dimen.card_content_padding)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.text_spacing_small))
             ) {
                 AssistChip(
                     onClick = { },
