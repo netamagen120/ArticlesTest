@@ -109,7 +109,7 @@ fun ArticlesScreen(
                         contentPadding = PaddingValues(dimensionResource(R.dimen.content_padding)),
                         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_medium))
                     ) {
-                        items(uiState.articles) { article ->
+                        items(uiState.articles, key = {it.url}) { article ->
                             ArticleCard(
                                 article = article,
                                 onClick = {
