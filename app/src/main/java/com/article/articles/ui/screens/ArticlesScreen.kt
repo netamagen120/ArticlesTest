@@ -25,7 +25,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -36,6 +35,7 @@ import com.article.articles.ui.components.ArticleCard
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArticlesScreen(
+    onArticleClick: (String, String) -> Unit,
     viewModel: ArticlesViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -95,7 +95,7 @@ fun ArticlesScreen(
                     items(uiState.articles, key = { it.url }) { article ->
                         ArticleCard(
                             article = article,
-                            onClick = { }
+                            onClick = { onArticleClick(article.url, article.title) }
                         )
                     }
                 }
